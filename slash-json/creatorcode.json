@@ -1,0 +1,12 @@
+{
+    "name" : "creatorcode",
+    "description" : "Returns data of a creator code",
+    "options" : [
+        {
+            "name" : "code",
+            "description" : "Sets the creator code.",
+            "required" : true,
+            "type" : "STRING"
+        }
+    ]
+}

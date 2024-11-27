@@ -1,0 +1,12 @@
+{
+    "name" : "playlist",
+    "description" : "Returns data of a playlist",
+    "options" : [
+        {
+            "name" : "playlist-id",
+            "description" : "Set the playlist-id",
+            "required" : true,
+            "type" : "STRING"
+        }
+    ]
+}
