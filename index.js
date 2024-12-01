@@ -3,11 +3,21 @@ const Discord = require("discord.js");
 const axios = require("axios");
 const chalk = require("chalk");
 const fs = require("fs/promises");
-const keep_alive = require('./keep_alive.js')
+const cron = require("node-cron");
 
 const client = new Discord.Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
 });
+
+async function runDailyScript() {
+  try {
+    const dailyScript = require("./shop/shop.js");
+    await dailyScript();
+    console.log(chalk.green("Le script quotidien a été exécuté avec succès à 2h du matin."));
+  } catch (error) {
+    console.error(chalk.red("Erreur lors de l'exécution du script quotidien:"), error);
+  }
+}
 
 async function loadSlashCommands(client) {
   const jsondir = "slash-json";
@@ -53,6 +63,11 @@ client.once("ready", async () => {
   } catch (error) {
     console.error("Error during initialization:", error);
   }
+
+  // Planifier l'exécution du script à 2h du matin tous les jours
+  cron.schedule('0 2 * * *', runDailyScript, {
+    timezone: "Europe/Paris" // Définir la timezone pour 2h du matin
+  });
 });
 
 client.on("interactionCreate", async (interaction) => {
