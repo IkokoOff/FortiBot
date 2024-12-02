@@ -4,6 +4,7 @@ const axios = require("axios");
 const chalk = require("chalk");
 const fs = require("fs/promises");
 const cron = require("node-cron");
+const keep_alive = require('./keep_alive.js')
 
 const client = new Discord.Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
