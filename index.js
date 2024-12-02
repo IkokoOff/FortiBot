@@ -86,7 +86,7 @@ client.on("guildDelete", updateStatus);
 async function updateStatus() {
   const server_count = client.guilds.cache.size;
   client.user.setPresence({
-    activities: [{ name: `${server_count} servers`, type: 'WATCHING' }],
+    activities: [{ name: `${server_count} servers｜/help`, type: 'WATCHING' }],
     status: 'online'
   });
   console.log(chalk.blue(`Updated status: ${server_count} servers.`));
