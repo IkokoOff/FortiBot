@@ -19,14 +19,15 @@ module.exports.run = async (client, interaction) => {
     const embed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Fortnite Map")
-      .setImage(data.images.pois)
+      .setImage(`${data.images.pois}?timestamp=${Date.now()}`) // Ajout du timestamp
       .setFooter(client.user.username, client.user.displayAvatarURL());
 
-    interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed] });
   } catch (error) {
     console.error(chalk.red("Error in Fortnite Map command:", error.message));
     interaction.reply({
       content: "An error occurred! Please try again later :)",
+      ephemeral: true, // Message visible uniquement à l'utilisateur
     });
   }
 };
