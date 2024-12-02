@@ -52,17 +52,17 @@ async function loadHandlers(client) {
   }
 }
 
+async function updateStatus() {
+  const server_count = client.guilds.cache.size;
+  client.user.setPresence({
+    activities: [{ name: `${server_count} servers｜/help`, type: 'WATCHING' }],
+    status: 'online',
+  });
+  console.log(chalk.blue(`Updated status: ${server_count} servers.`));
+}
+
 client.once("ready", async () => {
   console.log(chalk.bold.green(`Discord Bot ${client.user.tag} is online!`));
-
-  // Obtenir le nombre de serveurs où le bot est présent
-  const server_count = client.guilds.cache.size;
-
-  // Définir le statut du bot avec le nombre de serveurs
-  client.user.setPresence({
-    activities: [{ name: `${server_count} servers`, type: 'WATCHING' }],
-    status: 'online'
-  });
 
   client.commands = new Discord.Collection();
   client.handlers = new Discord.Collection();
@@ -74,32 +74,37 @@ client.once("ready", async () => {
     console.error("Error during initialization:", error);
   }
 
-  // Planifier l'exécution du script à 2h du matin tous les jours
+  // Met à jour le statut dès que le bot est prêt
+  await updateStatus();
+
+  // Planifie l'exécution du script quotidien à 2h du matin tous les jours
   cron.schedule('0 2 * * *', runDailyScript, {
-    timezone: "Europe/Paris" // Définir la timezone pour 2h du matin
+    timezone: "Europe/Paris",
   });
 });
 
 client.on("guildCreate", updateStatus);
 client.on("guildDelete", updateStatus);
 
-async function updateStatus() {
-  const server_count = client.guilds.cache.size;
-  client.user.setPresence({
-    activities: [{ name: `${server_count} servers｜/help`, type: 'WATCHING' }],
-    status: 'online'
-  });
-  console.log(chalk.blue(`Updated status: ${server_count} servers.`));
-}
-
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
     const cmd = client.handlers.get(interaction.commandName);
     if (cmd) {
-      await cmd.run(client, interaction);
-      console.log(chalk.gray(`Executed command ${interaction.commandName} | ${interaction.guildId} | ${interaction.user.id}`));
+      try {
+        await cmd.run(client, interaction);
+        console.log(chalk.gray(`Executed command ${interaction.commandName} | ${interaction.guildId} | ${interaction.user.id}`));
+      } catch (error) {
+        console.error(chalk.red(`Erreur dans la commande ${interaction.commandName}:`), error);
+        await interaction.reply({
+          content: "Une erreur est survenue lors de l'exécution de la commande.",
+          ephemeral: true,
+        });
+      }
     } else {
-      interaction.reply({ content: "Command not found!" });
+      await interaction.reply({
+        content: "Commande non trouvée !",
+        ephemeral: true,
+      });
     }
   }
 });
