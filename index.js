@@ -4,7 +4,7 @@ const axios = require("axios");
 const chalk = require("chalk");
 const fs = require("fs/promises");
 const cron = require("node-cron");
-const keep_alive = require('./keep_alive.js')
+const keep_alive = require('./keep_alive.js');
 
 const client = new Discord.Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
@@ -54,7 +54,16 @@ async function loadHandlers(client) {
 
 client.once("ready", async () => {
   console.log(chalk.bold.green(`Discord Bot ${client.user.tag} is online!`));
-  client.user.setPresence({ activities: [{ name: "with fortnite apis" }] });
+
+  // Obtenir le nombre de serveurs où le bot est présent
+  const server_count = client.guilds.cache.size;
+
+  // Définir le statut du bot avec le nombre de serveurs
+  client.user.setPresence({
+    activities: [{ name: `${server_count} servers`, type: 'WATCHING' }],
+    status: 'online'
+  });
+
   client.commands = new Discord.Collection();
   client.handlers = new Discord.Collection();
 
@@ -70,6 +79,18 @@ client.once("ready", async () => {
     timezone: "Europe/Paris" // Définir la timezone pour 2h du matin
   });
 });
+
+client.on("guildCreate", updateStatus);
+client.on("guildDelete", updateStatus);
+
+async function updateStatus() {
+  const server_count = client.guilds.cache.size;
+  client.user.setPresence({
+    activities: [{ name: `${server_count} servers`, type: 'WATCHING' }],
+    status: 'online'
+  });
+  console.log(chalk.blue(`Updated status: ${server_count} servers.`));
+}
 
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
