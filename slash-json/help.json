@@ -1,5 +1,4 @@
 {
   "name": "help",
-  "description": "Affiche la liste des commandes disponibles",
-  "options": []
+  "description": "Displays the list of available commands"
 }
