@@ -7,7 +7,7 @@ const cron = require("node-cron");
 const keep_alive = require('./keep_alive.js');
 
 const client = new Discord.Client({
-  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS", "GUILD_CREATE", "GUILD_DELETE"],
+  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
 });
 
 async function runDailyScript() {
