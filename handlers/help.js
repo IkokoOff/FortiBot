@@ -31,10 +31,12 @@ module.exports.run = async (client, interaction) => {
       const embed = new MessageEmbed()
         .setColor("RANDOM")
         .setTitle("Available Commands")
-        .setDescription(`There are **${commandsList.length} commands** available. Here are the commands you can use:`)
-        .addField("📞 Support Server", `[Join here](${supportServerURL})`, false)
-        .addField("👨‍💻 Developer", developerName, false)
-        .addField("🤖 Invite the Bot", `[Click here](${inviteURL})`, false)
+        .setDescription(
+          `📞 **Support Server**: [Join here](${supportServerURL})\n` +
+          `👨‍💻 **Developer**: ${developerName}\n` +
+          `🤖 **Invite the Bot**: [Click here](${inviteURL})\n\n` +
+          `There are **${commandsList.length} commands** available. Here are the commands you can use:`
+        )
         .setFooter(`Page ${page + 1} of ${totalPages}`, client.user.displayAvatarURL());
 
       currentCommands.forEach(command => {
