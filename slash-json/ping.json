@@ -1,4 +1,4 @@
 {
-  "name" : 
-  "" : 
+    "name" : "ping",
+    "description" : "Displays the bot's latency and Discord API latency."
 }
