@@ -18,7 +18,7 @@ module.exports.run = async (client, interaction) => {
     ];
 
     // Configuration des pages
-    const commandsPerPage = 3;
+    const commandsPerPage = 10;
     const totalPages = Math.ceil(commandsList.length / commandsPerPage);
     let currentPage = 0;
 
