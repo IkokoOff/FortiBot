@@ -13,7 +13,7 @@ module.exports.run = async (client, interaction) => {
     ];
 
     // Number of commands per page
-    const commandsPerPage = 3;
+    const commandsPerPage = 10;
 
     // Calculate the total number of pages
     const totalPages = Math.ceil(commandsList.length / commandsPerPage);
