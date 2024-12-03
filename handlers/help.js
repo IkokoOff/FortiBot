@@ -2,23 +2,23 @@ const Discord = require("discord.js");
 
 module.exports.run = async (client, interaction) => {
   try {
-    // Liste des commandes que tu veux afficher
+    // List of commands to display
     const commandsList = [
-      { name: '/news', description: 'Affiche les dernières actualités.' },
-      { name: '/shop', description: 'Affiche les articles disponibles dans la boutique.' },
-      { name: '/map', description: 'Affiche la carte actuelle de Fortnite.' },
-      { name: '/stats', description: 'Affiche vos statistiques.' },
-      { name: '/invite', description: 'Donne un lien pour inviter le bot.' },
-      { name: '/ping', description: 'Affiche la latence actuelle.' },
+      { name: '/news', description: 'Displays the latest news.' },
+      { name: '/shop', description: 'Displays the available items in the shop.' },
+      { name: '/map', description: 'Displays the current Fortnite map.' },
+      { name: '/stats', description: 'Shows your statistics.' },
+      { name: '/invite', description: 'Provides a link to invite the bot.' },
+      { name: '/ping', description: 'Displays the current latency.' },
     ];
 
-    // Constante pour le nombre de commandes par page
+    // Number of commands per page
     const commandsPerPage = 3;
 
-    // Calcul du nombre de pages
+    // Calculate the total number of pages
     const totalPages = Math.ceil(commandsList.length / commandsPerPage);
 
-    // Fonction pour créer l'embed d'une page donnée
+    // Function to create the embed for a specific page
     const generateEmbed = (page) => {
       const start = page * commandsPerPage;
       const end = start + commandsPerPage;
@@ -26,9 +26,9 @@ module.exports.run = async (client, interaction) => {
 
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
-        .setTitle("Liste des commandes disponibles")
-        .setDescription("Voici les commandes que vous pouvez utiliser :")
-        .setFooter(`Page ${page + 1} sur ${totalPages}`, client.user.displayAvatarURL());
+        .setTitle("Available Commands")
+        .setDescription("Here are the commands you can use:")
+        .setFooter(`Page ${page + 1} of ${totalPages}`, client.user.displayAvatarURL());
 
       currentCommands.forEach(command => {
         embed.addField(command.name, command.description, false);
@@ -37,95 +37,98 @@ module.exports.run = async (client, interaction) => {
       return embed;
     };
 
-    // Page de départ
+    // Initial page
     let currentPage = 0;
 
-    // Créer les boutons
-    const buttons = new Discord.MessageActionRow()
+    // Create the buttons
+    const buttons = () => new Discord.MessageActionRow()
       .addComponents(
         new Discord.MessageButton()
           .setCustomId('previous')
-          .setLabel('⬅️ Précédent')
+          .setLabel('⬅️ Previous')
           .setStyle('PRIMARY')
           .setDisabled(currentPage === 0),
         new Discord.MessageButton()
           .setCustomId('next')
-          .setLabel('➡️ Suivant')
+          .setLabel('➡️ Next')
           .setStyle('PRIMARY')
-          .setDisabled(currentPage === totalPages - 1)
+          .setDisabled(currentPage === totalPages - 1),
+        new Discord.MessageButton()
+          .setCustomId('close')
+          .setLabel('❌ Close')
+          .setStyle('DANGER')
       );
 
-    // Envoie de l'embed initial
+    // Send the initial embed (visible to everyone)
     const message = await interaction.reply({
       embeds: [generateEmbed(currentPage)],
-      components: [buttons],
-      ephemeral: true,
+      components: [buttons()],
       fetchReply: true
     });
 
-    // Création d'un collecteur d'interactions pour les boutons
+    // Create a collector for button interactions with a 2-minute duration
     const collector = message.createMessageComponentCollector({
       componentType: 'BUTTON',
-      time: 60000 // Le collecteur dure 60 secondes
+      time: 120000 // 2 minutes
     });
 
     collector.on('collect', async (i) => {
       if (i.user.id !== interaction.user.id) {
-        return i.reply({ content: "Vous ne pouvez pas utiliser ces boutons.", ephemeral: true });
+        return i.reply({ content: "You cannot use these buttons.", ephemeral: true });
       }
 
-      // Mise à jour de la page actuelle en fonction du bouton cliqué
       if (i.customId === 'previous' && currentPage > 0) {
         currentPage--;
       } else if (i.customId === 'next' && currentPage < totalPages - 1) {
         currentPage++;
+      } else if (i.customId === 'close') {
+        // Delete the message if the "Close" button is pressed
+        await message.delete().catch(console.error);
+        collector.stop(); // Stop the collector after closing
+        return;
       }
 
-      // Mise à jour de l'embed et des boutons
+      // Update the embed and buttons
       await i.update({
         embeds: [generateEmbed(currentPage)],
-        components: [
-          new Discord.MessageActionRow()
-            .addComponents(
-              new Discord.MessageButton()
-                .setCustomId('previous')
-                .setLabel('⬅️ Précédent')
-                .setStyle('PRIMARY')
-                .setDisabled(currentPage === 0),
-              new Discord.MessageButton()
-                .setCustomId('next')
-                .setLabel('➡️ Suivant')
-                .setStyle('PRIMARY')
-                .setDisabled(currentPage === totalPages - 1)
-            )
-        ]
+        components: [buttons()]
       });
     });
 
-    collector.on('end', () => {
-      // Désactivation des boutons après la fin du temps
-      message.edit({
+    collector.on('end', async () => {
+      // Disable buttons after the collector ends
+      await message.edit({
         components: [
           new Discord.MessageActionRow()
             .addComponents(
               new Discord.MessageButton()
                 .setCustomId('previous')
-                .setLabel('⬅️ Précédent')
+                .setLabel('⬅️ Previous')
                 .setStyle('PRIMARY')
                 .setDisabled(true),
               new Discord.MessageButton()
                 .setCustomId('next')
-                .setLabel('➡️ Suivant')
+                .setLabel('➡️ Next')
                 .setStyle('PRIMARY')
+                .setDisabled(true),
+              new Discord.MessageButton()
+                .setCustomId('close')
+                .setLabel('❌ Close')
+                .setStyle('DANGER')
                 .setDisabled(true)
             )
         ]
       });
+
+      // Automatically delete the message 2 seconds after disabling the buttons
+      setTimeout(() => {
+        message.delete().catch(console.error);
+      }, 2000);
     });
   } catch (error) {
-    console.error("Erreur dans la commande help :", error.message);
+    console.error("Error in help command:", error.message);
     interaction.reply({
-      content: "Une erreur est survenue ! Veuillez réessayer plus tard.",
+      content: "An error occurred! Please try again later.",
       ephemeral: true
     });
   }
