@@ -10,6 +10,9 @@ const client = new Discord.Client({
   intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MEMBERS"],
 });
 
+// Cooldowns Map pour suivre les utilisateurs et leurs délais
+const cooldowns = new Map();
+
 async function runDailyScript() {
   try {
     const dailyScript = require("./shop/shop.js");
@@ -89,20 +92,40 @@ client.on("guildDelete", updateStatus);
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
     const cmd = client.handlers.get(interaction.commandName);
-    if (cmd) {
-      try {
-        await cmd.run(client, interaction);
-        console.log(chalk.gray(`Executed command ${interaction.commandName} | ${interaction.guildId} | ${interaction.user.id}`));
-      } catch (error) {
-        console.error(chalk.red(`Erreur dans la commande ${interaction.commandName}:`), error);
-        await interaction.reply({
-          content: "Une erreur est survenue lors de l'exécution de la commande.",
+    if (!cmd) {
+      await interaction.reply({
+        content: "Commande non trouvée !",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    const userId = interaction.user.id; // ID de l'utilisateur qui a exécuté la commande
+    const now = Date.now();  // Timestamp actuel
+    const cooldownAmount = 3000;  // Cooldown de 3 secondes (3000 ms)
+
+    if (cooldowns.has(userId)) {
+      const expirationTime = cooldowns.get(userId) + cooldownAmount;
+
+      if (now < expirationTime) {
+        const timeLeft = ((expirationTime - now) / 1000).toFixed(1); // Temps restant en secondes
+        return interaction.reply({
+          content: `⏳ Please wait ${timeLeft} more second(s) before using this command again.`,
           ephemeral: true,
         });
       }
-    } else {
+    }
+
+    // Si le cooldown est expiré, on met à jour le timestamp et on exécute la commande
+    cooldowns.set(userId, now);
+
+    try {
+      await cmd.run(client, interaction);
+      console.log(chalk.gray(`Executed command ${interaction.commandName} | ${interaction.guildId} | ${interaction.user.id}`));
+    } catch (error) {
+      console.error(chalk.red(`Erreur dans la commande ${interaction.commandName}:`), error);
       await interaction.reply({
-        content: "Commande non trouvée !",
+        content: "Une erreur est survenue lors de l'exécution de la commande.",
         ephemeral: true,
       });
     }
