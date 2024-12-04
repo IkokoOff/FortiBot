@@ -2,12 +2,10 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports.run = async (client, interaction) => {
   try {
-    // Configuration des informations de l'en-tête
-    const supportServerURL = "https://discord.gg/votre-serveur-support"; // Lien du serveur support
-    const developerName = "Ikoko"; // Nom du développeur
-    const inviteURL = "https://discord.com/oauth2/authorize?client_id=VOTRE_ID_CLIENT&scope=bot&permissions=8"; // Lien d'invitation du bot
+    const supportServerURL = "https://discord.gg/votre-serveur-support";
+    const developerName = "Ikoko";
+    const inviteURL = "https://discord.com/oauth2/authorize?client_id=VOTRE_ID_CLIENT&scope=bot&permissions=8";
 
-    // Liste des commandes à afficher
     const commandsList = [
       { name: '/news', description: 'Displays the latest news.' },
       { name: '/shop', description: 'Displays the available items in the shop.' },
@@ -17,12 +15,10 @@ module.exports.run = async (client, interaction) => {
       { name: '/ping', description: 'Displays the current latency.' },
     ];
 
-    // Configuration des pages
     const commandsPerPage = 10;
     const totalPages = Math.ceil(commandsList.length / commandsPerPage);
     let currentPage = 0;
 
-    // Fonction pour générer l'embed d'une page spécifique
     const generateEmbed = (page) => {
       const start = page * commandsPerPage;
       const end = start + commandsPerPage;
@@ -46,7 +42,6 @@ module.exports.run = async (client, interaction) => {
       return embed;
     };
 
-    // Fonction pour générer les boutons
     const generateButtons = (page) => new MessageActionRow()
       .addComponents(
         new MessageButton()
@@ -61,7 +56,7 @@ module.exports.run = async (client, interaction) => {
           .setDisabled(page === totalPages - 1),
         new MessageButton()
           .setCustomId('close')
-          .setLabel('❌ Close')
+          .setLabel('✕ Close')
           .setStyle('DANGER')
       );
 
@@ -72,10 +67,9 @@ module.exports.run = async (client, interaction) => {
       fetchReply: true
     });
 
-    // Collecteur pour gérer les interactions sur les boutons
     const collector = message.createMessageComponentCollector({
       componentType: 'BUTTON',
-      time: 120000 // 2 minutes
+      time: 120000
     });
 
     collector.on('collect', async (i) => {
@@ -88,13 +82,11 @@ module.exports.run = async (client, interaction) => {
       } else if (i.customId === 'next' && currentPage < totalPages - 1) {
         currentPage++;
       } else if (i.customId === 'close') {
-        // Supprimer le message si le bouton "Close" est pressé
         await i.message.delete().catch(console.error);
-        collector.stop(); // Arrête le collecteur
+        collector.stop();
         return;
       }
 
-      // Mise à jour de l'embed et des boutons
       await i.update({
         embeds: [generateEmbed(currentPage)],
         components: [generateButtons(currentPage)]
@@ -103,7 +95,6 @@ module.exports.run = async (client, interaction) => {
 
     collector.on('end', async () => {
       try {
-        // Désactiver les boutons après expiration du collecteur
         const fetchedMessage = await interaction.channel.messages.fetch(message.id);
         if (fetchedMessage) {
           await fetchedMessage.edit({
@@ -122,13 +113,12 @@ module.exports.run = async (client, interaction) => {
                     .setDisabled(true),
                   new MessageButton()
                     .setCustomId('close')
-                    .setLabel('❌ Close')
+                    .setLabel('✕ Close')
                     .setStyle('DANGER')
                     .setDisabled(true)
                 )
             ]
           });
-          // Supprimer le message 2 secondes après désactivation
           setTimeout(() => {
             fetchedMessage.delete().catch(console.error);
           }, 2000);
