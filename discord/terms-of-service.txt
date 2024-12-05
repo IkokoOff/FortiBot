@@ -1,5 +1,5 @@
 TERMS OF SERVICE
-Last Updated: [date]
+Last Updated: 12/05/24
 
 Welcome to FortiBot! These Terms of Service ("Terms") govern your access to and use of FortiBot, a Discord bot that provides Fortnite-related features and information via the Fortnite API. Please read these Terms carefully before using the bot.
 
@@ -86,9 +86,7 @@ We reserve the right to modify these Terms at any time. Any changes will be post
 
 If you have any questions or concerns about these Terms, please contact us through:
 
-Support Server: [Link to Discord Server]
-
-Email: [Email Address]
+Support Server: https://discord.gg/FYe6zqaz88
 
 
 By using FortiBot, you acknowledge that you have read and agree to these Terms of Service.
