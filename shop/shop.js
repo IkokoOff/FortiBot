@@ -4,11 +4,11 @@ const discordWebhook = require("./Assets/discord_webhook.js");
 
 const { shopItem: shopItemImage, finishProgram } = require("./Assets/utils.js");
 
-console.log("[INFO] Checking store items");
-
-(async function dailyScript() {
+async function dailyScript() {
     const { default: fetch } = await import('node-fetch');
 
+    console.log("[INFO] Checking store items");
+    
     const shopData = await fetch(
         "https://fortnite-api.com/v2/shop?language=en")
 
@@ -258,6 +258,6 @@ console.log("[INFO] Checking store items");
     }).catch((err) => {
         console.error("[ERROR] Error saving store image:", err);
     });
-})();
+};
 
 module.exports = dailyScript;
