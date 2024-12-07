@@ -17,9 +17,9 @@ async function runDailyScript() {
   try {
     const dailyScript = require("./shop/shop.js");
     await dailyScript();
-    console.log(chalk.green("Le script quotidien a été exécuté avec succès à 2h du matin."));
+    console.log(chalk.green("Daily script has been executed"));
   } catch (error) {
-    console.error(chalk.red("Erreur lors de l'exécution du script quotidien:"), error);
+    console.error(chalk.red("Error running daily script:"), error);
   }
 }
 
