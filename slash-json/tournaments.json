@@ -1,0 +1,22 @@
+{
+    "name": "tournaments",
+    "description": "Fetches the latest Fortnite event for a specific region",
+    "options": [
+      {
+        "name": "region",
+        "description": "Select the region for the Fortnite event",
+        "type": "STRING",
+        "required": true,
+        "choices": [
+          { "name": "North America East (NAE)", "value": "NAE" },
+          { "name": "North America West (NAW)", "value": "NAW" },
+          { "name": "Europe (EU)", "value": "EU" },
+          { "name": "Asia (ASIA)", "value": "ASIA" },
+          { "name": "Brazil (BR)", "value": "BR" },
+          { "name": "Middle East (ME)", "value": "ME" },
+          { "name": "Oceania (OCE)", "value": "OCE" }
+        ]
+      }
+    ]
+  }
+  
