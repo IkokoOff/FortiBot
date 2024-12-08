@@ -81,7 +81,7 @@ client.once("ready", async () => {
   await updateStatus();
 
   // Planifie l'exécution du script quotidien à 2h du matin tous les jours
-  cron.schedule('30 16 * * *', runDailyScript, {
+  cron.schedule('30 17 * * *', runDailyScript, {
     timezone: "Europe/Paris",
   });
 });
