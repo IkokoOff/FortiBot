@@ -107,7 +107,7 @@ module.exports.run = async (client, interaction) => {
                   .setDisabled(currentPage === chunkedEvents.length - 1),
                 new MessageButton()
                   .setCustomId('close')
-                  .setLabel('❌ Close')
+                  .setLabel('✕ Close')
                   .setStyle('DANGER')
               );
 
