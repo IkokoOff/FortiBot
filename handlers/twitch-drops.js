@@ -3,7 +3,7 @@ const axios = require("axios").default;
 
 module.exports.run = async (client, interaction) => {
   try {
-    // Récupération des données depuis l'API Fortnite Twitch Drops
+    // Récupérer les données depuis l'API Fortnite Twitch Drops
     const req = await axios.get("https://fortniteapi.io/v1/twitch/drops", {
       headers: {
         Authorization: process.env.FNAPIIO, // Clé API
@@ -15,7 +15,10 @@ module.exports.run = async (client, interaction) => {
 
       if (drops && drops.length > 0) {
         const now = new Date(); // Date actuelle
-        const activeDrops = drops.filter(drop => new Date(drop.endDate) > now); // Filtrer uniquement les drops actifs
+        const activeDrops = drops.filter(drop => {
+          const endDate = new Date(drop.endDate); // Convertir la fin en objet Date
+          return endDate > now; // Garder seulement les drops encore valides
+        });
 
         if (activeDrops.length > 0) {
           // Construction d'un embed Discord pour les drops actifs
@@ -25,10 +28,14 @@ module.exports.run = async (client, interaction) => {
             .setDescription("Voici les Twitch Drops actuellement disponibles pour Fortnite.");
 
           activeDrops.forEach(drop => {
+            const startTimestamp = Math.floor(new Date(drop.startDate).getTime() / 1000); // Convertir en timestamp UNIX
+            const endTimestamp = Math.floor(new Date(drop.endDate).getTime() / 1000); // Convertir en timestamp UNIX
+
             embed.addField(
               `${drop.displayName}`,
               `**Description :** ${drop.description || "Aucune description"}\n` +
-                `**Fin :** ${new Date(drop.endDate).toLocaleString()}\n` +
+                `**Début :** <t:${startTimestamp}:F> (<t:${startTimestamp}:R>)\n` +
+                `**Fin :** <t:${endTimestamp}:F> (<t:${endTimestamp}:R>)\n` +
                 `[Détails](${drop.detailsURL})`,
               false
             );
