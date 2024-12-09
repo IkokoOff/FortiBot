@@ -2,7 +2,7 @@ const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const axios = require('axios');
 const { createCanvas, loadImage } = require('canvas');
 
-module.exports = async (interaction) => {
+module.exports.run = async (client, interaction) => {
   // Appeler l'API Fortnite
   try {
     const { data } = await axios.get('https://fortnite-api.com/v1/map');
