@@ -1,13 +1,14 @@
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const axios = require('axios');
 const { createCanvas, loadImage } = require('canvas');
+const path = require('path');
 
 module.exports.run = async (client, interaction) => {
-  // Appeler l'API Fortnite
   try {
+    // Appeler l'API Fortnite
     const { data } = await axios.get('https://fortnite-api.com/v1/map');
     const mapData = data.data;
-    const pois = mapData.pois;
+    const pois = data.data.pois;
 
     // Choisir un POI aléatoire
     const randomPOI = pois[Math.floor(Math.random() * pois.length)];
@@ -15,19 +16,19 @@ module.exports.run = async (client, interaction) => {
     const { x, y } = location;
 
     // Convertir les coordonnées Fortnite en pixels pour l'image
-    const mapWidth = 2048; // Largeur de l'image
-    const mapHeight = 2048; // Hauteur de l'image
+    const mapWidth = 2048;
+    const mapHeight = 2048;
     const mapX = Math.round((x + 175000) / 350000 * mapWidth);
     const mapY = Math.round((175000 - y) / 350000 * mapHeight);
 
     // Charger l'image et dessiner le pin
     const canvas = createCanvas(mapWidth, mapHeight);
     const ctx = canvas.getContext('2d');
-    const mapImage = await loadImage(mapData.images.blank);
-    const pinImage = await loadImage('./assets/pin/pin.png'); // Exemple d'un pin rouge
+    const mapImage = await loadImage(mapData.images.pois);
+    const pinImage = await loadImage(path.join(__dirname, '../assets/pin/pin.png'));
 
     ctx.drawImage(mapImage, 0, 0, mapWidth, mapHeight);
-    ctx.drawImage(pinImage, mapX - 15, mapY - 30, 30, 30); // Ajuster le positionnement du pin
+    ctx.drawImage(pinImage, mapX - 15, mapY - 30, 30, 30);
 
     // Convertir l'image en buffer
     const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'map-pin.png' });
@@ -43,7 +44,10 @@ module.exports.run = async (client, interaction) => {
     await interaction.reply({ embeds: [embed], files: [attachment] });
 
   } catch (error) {
-    console.error(error);
-    interaction.reply({ content: 'Une erreur est survenue en récupérant les données de la carte.', ephemeral: true });
+    console.error(error.message, error.stack);
+    interaction.reply({
+      content: `Une erreur est survenue : ${error.message}`,
+      ephemeral: true
+    });
   }
 };
