@@ -24,7 +24,7 @@ module.exports.run = async (client, interaction) => {
     const canvas = createCanvas(mapWidth, mapHeight);
     const ctx = canvas.getContext('2d');
     const mapImage = await loadImage(mapData.images.blank);
-    const pinImage = await loadImage('../assets/pin/pin.png'); // Exemple d'un pin rouge
+    const pinImage = await loadImage('./assets/pin/pin.png'); // Exemple d'un pin rouge
 
     ctx.drawImage(mapImage, 0, 0, mapWidth, mapHeight);
     ctx.drawImage(pinImage, mapX - 15, mapY - 30, 30, 30); // Ajuster le positionnement du pin
