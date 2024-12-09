@@ -3,7 +3,7 @@ const axios = require("axios").default;
 
 module.exports.run = async (client, interaction) => {
   try {
-    // Récupérer les données depuis l'API Fortnite Twitch Drops
+    // Récupération des données depuis l'API Fortnite Twitch Drops
     const req = await axios.get("https://fortniteapi.io/v1/twitch/drops", {
       headers: {
         Authorization: process.env.FNAPIIO, // Clé API
@@ -14,24 +14,38 @@ module.exports.run = async (client, interaction) => {
       const drops = req.data.drops;
 
       if (drops && drops.length > 0) {
-        // Construction d'un embed Discord pour afficher les drops
-        const embed = new Discord.MessageEmbed()
-          .setColor("RANDOM")
-          .setTitle("Twitch Drops disponibles pour Fortnite")
-          .setDescription("Voici les informations sur les drops Twitch actifs ou passés.");
+        const now = new Date(); // Date actuelle
+        const activeDrops = drops.filter(drop => new Date(drop.endDate) > now); // Filtrer uniquement les drops actifs
 
-        drops.forEach((drop) => {
-          embed.addField(
-            `${drop.displayName} (${drop.status})`,
-            `**Description:** ${drop.description || "Aucune description"}\n` +
-              `**Début:** ${new Date(drop.startDate).toLocaleString()}\n` +
-              `**Fin:** ${new Date(drop.endDate).toLocaleString()}\n` +
-              `[Détails](${drop.detailsURL})`,
-            false
-          );
-        });
+        if (activeDrops.length > 0) {
+          // Construction d'un embed Discord pour les drops actifs
+          const embed = new Discord.MessageEmbed()
+            .setColor("GREEN")
+            .setTitle("Twitch Drops Actifs pour Fortnite")
+            .setDescription("Voici les Twitch Drops actuellement disponibles pour Fortnite.");
 
-        return interaction.reply({ embeds: [embed] });
+          activeDrops.forEach(drop => {
+            embed.addField(
+              `${drop.displayName}`,
+              `**Description :** ${drop.description || "Aucune description"}\n` +
+                `**Fin :** ${new Date(drop.endDate).toLocaleString()}\n` +
+                `[Détails](${drop.detailsURL})`,
+              false
+            );
+          });
+
+          return interaction.reply({ embeds: [embed] });
+        } else {
+          // Aucun drop actif
+          return interaction.reply({
+            embeds: [
+              new Discord.MessageEmbed()
+                .setTitle("Aucun drop actif")
+                .setColor("YELLOW")
+                .setDescription("Il n'y a actuellement aucun Twitch Drop actif pour Fortnite."),
+            ],
+          });
+        }
       } else {
         // Aucun drop trouvé
         return interaction.reply({
@@ -39,7 +53,7 @@ module.exports.run = async (client, interaction) => {
             new Discord.MessageEmbed()
               .setTitle("Aucun drop disponible")
               .setColor("YELLOW")
-              .setDescription("Il n'y a actuellement aucun Twitch Drop actif."),
+              .setDescription("Il n'y a actuellement aucun Twitch Drop enregistré."),
           ],
         });
       }
