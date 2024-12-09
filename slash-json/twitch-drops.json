@@ -1,2 +1,4 @@
 {
-  "name"
+    "name" : "twitch-drops",
+    "description" : "List of twitch drops"
+}
