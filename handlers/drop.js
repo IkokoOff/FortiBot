@@ -24,7 +24,6 @@ module.exports.run = async (client, interaction) => {
     const canvas = createCanvas(mapWidth, mapHeight);
     const ctx = canvas.getContext('2d');
     const mapImage = await loadImage(mapData.images.blank);
-    console.log('Chemin de l\'image :', path.join(__dirname, '../assets/pin/pin.png'));
     const pinImage = await loadImage('./assets/pin/pin.png'); // Exemple d'un pin rouge
 
     ctx.drawImage(mapImage, 0, 0, mapWidth, mapHeight);
