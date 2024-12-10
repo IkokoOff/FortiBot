@@ -2,9 +2,9 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports.run = async (client, interaction) => {
   try {
-    const supportServerURL = "https://discord.gg/votre-serveur-support";
+    const supportServerURL = "https://discord.gg/zZStXYa8Pu";
     const developerName = "Ikoko";
-    const inviteURL = "https://discord.com/oauth2/authorize?client_id=VOTRE_ID_CLIENT&scope=bot&permissions=8";
+    const inviteURL = "https://discord.com/oauth2/authorize?client_id=1311574867992248340&permissions=8&integration_type=0&scope=bot+applications.commands";
 
     const commandsList = [
       { name: '/news', description: 'Displays the latest news.' },
