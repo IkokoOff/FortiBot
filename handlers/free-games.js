@@ -28,6 +28,7 @@ module.exports.run = async (client, interaction) => {
       .setTitle("Free Promotional Games")
       .setDescription(freeGames.map(gameData => {
         const { title, urlSlug, promotions } = gameData;
+      .setFooter(client.user.username, client.user.displayAvatarURL());
 
         // Extract promotion start and end dates
         const promo = promotions.promotionalOffers?.[0]?.promotionalOffers?.[0];
