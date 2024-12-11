@@ -26,9 +26,9 @@ module.exports.run = async (client, interaction) => {
     const gameEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Free Promotional Games")
+      .setFooter(client.user.username, client.user.displayAvatarURL());
       .setDescription(freeGames.map(gameData => {
         const { title, urlSlug, promotions } = gameData;
-      .setFooter(client.user.username, client.user.displayAvatarURL());
 
         // Extract promotion start and end dates
         const promo = promotions.promotionalOffers?.[0]?.promotionalOffers?.[0];
