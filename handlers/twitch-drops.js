@@ -3,10 +3,10 @@ const axios = require("axios").default;
 
 module.exports.run = async (client, interaction) => {
   try {
-    // Récupérer les données depuis l'API Fortnite Twitch Drops
+    // Fetch data from the Fortnite Twitch Drops API
     const req = await axios.get("https://fortniteapi.io/v1/twitch/drops", {
       headers: {
-        Authorization: process.env.FNAPIIO, // Clé API
+        Authorization: process.env.FNAPIIO, // API key
       },
     });
 
@@ -14,69 +14,69 @@ module.exports.run = async (client, interaction) => {
       const drops = req.data.drops;
 
       if (drops && drops.length > 0) {
-        const now = new Date(); // Date actuelle
+        const now = new Date(); // Current date
         const activeDrops = drops.filter(drop => {
-          const endDate = new Date(drop.endDate); // Convertir la fin en objet Date
-          return endDate > now; // Garder seulement les drops encore valides
+          const endDate = new Date(drop.endDate); // Convert end date to Date object
+          return endDate > now; // Keep only valid drops
         });
 
         if (activeDrops.length > 0) {
-          // Construction d'un embed Discord pour les drops actifs
+          // Build a Discord embed for active drops
           const embed = new Discord.MessageEmbed()
             .setColor("GREEN")
-            .setTitle("Twitch Drops Actifs pour Fortnite")
-            .setDescription("Voici les Twitch Drops actuellement disponibles pour Fortnite.");
+            .setTitle("Active Twitch Drops for Fortnite")
+            .setDescription("Here are the currently available Twitch Drops for Fortnite.");
 
           activeDrops.forEach(drop => {
-            const startTimestamp = Math.floor(new Date(drop.startDate).getTime() / 1000); // Convertir en timestamp UNIX
-            const endTimestamp = Math.floor(new Date(drop.endDate).getTime() / 1000); // Convertir en timestamp UNIX
+            const startTimestamp = Math.floor(new Date(drop.startDate).getTime() / 1000); // Convert to UNIX timestamp
+            const endTimestamp = Math.floor(new Date(drop.endDate).getTime() / 1000); // Convert to UNIX timestamp
 
             embed.addField(
               `${drop.displayName}`,
-              `**Description :** ${drop.description || "Aucune description"}\n` +
-                `**Début :** <t:${startTimestamp}:F> (<t:${startTimestamp}:R>)\n` +
-                `**Fin :** <t:${endTimestamp}:F> (<t:${endTimestamp}:R>)\n` +
-                `[Détails](${drop.detailsURL})`,
+              `**Description:** ${drop.description || "No description"}\n` +
+                `**Start:** <t:${startTimestamp}:F> (<t:${startTimestamp}:R>)\n` +
+                `**End:** <t:${endTimestamp}:F> (<t:${endTimestamp}:R>)\n` +
+                `[Details](${drop.detailsURL})`,
               false
             );
           });
 
           return interaction.reply({ embeds: [embed] });
         } else {
-          // Aucun drop actif
+          // No active drops
           return interaction.reply({
             embeds: [
               new Discord.MessageEmbed()
-                .setTitle("Aucun drop actif")
+                .setTitle("No Active Drops")
                 .setColor("YELLOW")
-                .setDescription("Il n'y a actuellement aucun Twitch Drop actif pour Fortnite."),
+                .setDescription("There are currently no active Twitch Drops for Fortnite."),
             ],
           });
         }
       } else {
-        // Aucun drop trouvé
+        // No drops found
         return interaction.reply({
           embeds: [
             new Discord.MessageEmbed()
-              .setTitle("Aucun drop disponible")
+              .setTitle("No Drops Available")
               .setColor("YELLOW")
-              .setDescription("Il n'y a actuellement aucun Twitch Drop enregistré."),
+              .setDescription("There are currently no registered Twitch Drops."),
           ],
         });
       }
     } else {
-      throw new Error("Erreur lors de l'appel à l'API Fortnite Twitch Drops");
+      throw new Error("Error while calling the Fortnite Twitch Drops API");
     }
   } catch (error) {
     console.error(error);
 
-    // Gestion des erreurs
+    // Handle errors
     return interaction.reply({
       embeds: [
         new Discord.MessageEmbed()
           .setColor("RED")
-          .setTitle("Erreur API")
-          .setDescription("Une erreur est survenue lors de la récupération des données. Veuillez réessayer plus tard."),
+          .setTitle("API Error")
+          .setDescription("An error occurred while fetching the data. Please try again later."),
       ],
     });
   }
