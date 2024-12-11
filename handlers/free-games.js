@@ -26,7 +26,6 @@ module.exports.run = async (client, interaction) => {
     const gameEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
       .setTitle("Free Promotional Games")
-      .setFooter(client.user.username, client.user.displayAvatarURL());
       .setDescription(freeGames.map(gameData => {
         const { title, urlSlug, promotions } = gameData;
 
