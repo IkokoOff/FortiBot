@@ -25,7 +25,7 @@ module.exports.run = async (client, interaction) => {
     // Format the free games data into a single embed
     const gameEmbed = new Discord.MessageEmbed()
       .setColor("RANDOM")
-      .setTitle("Free Epic Games")
+      .setTitle("Free Promotional Games")
       .setDescription(freeGames.map(gameData => {
         const { title, urlSlug, promotions } = gameData;
 
@@ -33,7 +33,7 @@ module.exports.run = async (client, interaction) => {
         const promo = promotions.promotionalOffers?.[0]?.promotionalOffers?.[0];
         const startDate = promo ? `<t:${Math.floor(new Date(promo.startDate).getTime() / 1000)}:F> (<t:${Math.floor(new Date(promo.startDate).getTime() / 1000)}:R>)` : "N/A";
         const endDate = promo ? `<t:${Math.floor(new Date(promo.endDate).getTime() / 1000)}:F> (<t:${Math.floor(new Date(promo.endDate).getTime() / 1000)}:R>)` : "N/A";
-        const gameUrl = `https://www.epicgames.com/store/fr/p/${urlSlug}`; // Link to the Epic Games product page
+        const gameUrl = `https://www.epicgames.com/store/en-US/p/${urlSlug}`; // Link to the Epic Games product page
 
         // Return the game as a clickable link with timestamps
         return `**[${title}](${gameUrl})**\nStart date: **${startDate}**\nEnd date: **${endDate}**\n`;
