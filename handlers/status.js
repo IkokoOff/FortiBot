@@ -32,7 +32,7 @@ module.exports.run = async (client, interaction) => {
 
     // Ajouter un emoji si le statut est "UP"
     const statusText = fortniteStatus.status === "UP"
-      ? `> Up <a:checkmark:1317929435101397064>`
+      ? `> Up <a:checkmark:1317922241471840329>`
       : `> Down`
 
     // Créer l'embed avec les données de l'API et inclure l'image
