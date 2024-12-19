@@ -29,11 +29,12 @@ module.exports.run = async (client, interaction) => {
       const item1 = fortniteApiReq.data.data;
       const item2 = fortniteApiIoReq.data.items[0];
 
-      // Gestion du shop (lastAppearance et releaseDate)
+      // Gestion du shop (lastAppearance, releaseDate et total appearances)
       const releaseDate = item2.releaseDate ? `<t:${Math.floor(new Date(item2.releaseDate).getTime() / 1000)}>` : "N/A";
       const lastAppearance = item2.lastAppearance
         ? `<t:${Math.floor(new Date(item2.lastAppearance).getTime() / 1000)}>`
         : "N/A";
+      const totalAppearances = item2.shopHistory ? item2.shopHistory.length : 0;
 
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
@@ -47,12 +48,12 @@ module.exports.run = async (client, interaction) => {
           { name: "Rarity", value: item1.rarity.displayValue, inline: true },
           { name: "Set", value: item1.set?.text || "No set information", inline: true },
           { name: "Introduction", value: item1.introduction?.text || "Unknown", inline: true },
-          { name: "Tags", value: item2.gameplayTags?.length ? "```json\n" + item2.gameplayTags.join(", ") + "\n```" : "No tags available", inline: false },
+          { name: "Tags", value: item2.gameplayTags?.length ? "```json\n" + item2.gameplayTags.join("\n") + "\n```" : "No tags available", inline: false },
           { name: "Path", value: `\`${item2.path}\``, inline: false },
           { name: "Video", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
           {
             name: "Shop History",
-            value: `Release Date: ${releaseDate}\nLast Appearance: ${lastAppearance}`,
+            value: `Release Date: ${releaseDate}\nLast Appearance: ${lastAppearance}\nTotal: ${totalAppearances}`,
             inline: true
           }
         );
