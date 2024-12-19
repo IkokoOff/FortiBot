@@ -18,7 +18,7 @@ module.exports.run = async (client, interaction) => {
 
       // Requête vers fortnite-api.com pour la vidéo
       const reqFortniteAPI = await axios.get(
-        `https://fortniteapi.io/v2/items/list?id=${item.id}`
+        `https://fortnite-api.com/v2/cosmetics/br/search?id=${item.id}`
       );
 
       const videoLink = reqFortniteAPI.data?.data?.showcaseVideo || "No video available";
