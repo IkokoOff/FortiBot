@@ -1,10 +1,10 @@
 {
-    "name" : "item",
-    "description" : "Get info about an item",
+    "name" : "cosmetic",
+    "description" : "Get info about an cosmetic",
     "options" : [
         {
             "name" : "name",
-            "description" : "Name of the item",
+            "description" : "Name of the cosmetic",
             "required" : true,
             "type" : "STRING"
         }
