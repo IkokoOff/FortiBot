@@ -47,18 +47,18 @@ module.exports.run = async (client, interaction) => {
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setThumbnail(item1.images.icon) // Image sur le côté
-        .setTitle(`Information on: ${item1.name}`)
+        .setTitle("Cosmetic Info:")
         .addFields(
-          { name: "Name", value: item1.name, inline: true },
-          { name: "Description", value: item1.description || "No description", inline: true },
-          { name: "Cosmetic ID", value: item1.id, inline: true },
-          { name: "Cosmetic Type", value: item1.type.displayValue, inline: true },
-          { name: "Rarity", value: item1.rarity.displayValue, inline: true },
-          { name: "Set", value: item1.set?.text || "No set information", inline: true },
-          { name: "Introduction", value: item1.introduction?.text || "Unknown", inline: true },
-          { name: "Tags", value: item2.gameplayTags?.length ? "```json\n" + item2.gameplayTags.join("\n") + "\n```" : "No tags available", inline: false },
-          { name: "Path", value: `\`${item2.path}\``, inline: false },
-          { name: "Video", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
+          { name: "Name:", value: item1.name, inline: true },
+          { name: "Description:", value: item1.description || "No description", inline: true },
+          { name: "Cosmetic ID:", value: item1.id, inline: true },
+          { name: "Cosmetic Type:", value: item1.type.displayValue, inline: true },
+          { name: "Rarity:", value: item1.rarity.displayValue, inline: true },
+          { name: "Set:", value: item1.set?.text || "No set information", inline: true },
+          { name: "Introduction:", value: item1.introduction?.text || "Unknown", inline: true },
+          { name: "Tags:", value: item2.gameplayTags?.length ? "```json\n" + item2.gameplayTags.join("\n") + "\n```" : "No tags available", inline: false },
+          { name: "Path:", value: `\`${item2.path}\``, inline: false },
+          { name: "Video:", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
           {
             name: "Shop History",
             value: `Release Date: ${releaseDate ? `<t:${Math.floor(releaseDate.getTime() / 1000)}>` : "N/A"}\nLast Appearance: ${lastAppearance ? `<t:${Math.floor(lastAppearance.getTime() / 1000)}>` : "N/A"}\nTotal Days: ${totalDays}`,
