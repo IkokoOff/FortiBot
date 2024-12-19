@@ -29,32 +29,30 @@ module.exports.run = async (client, interaction) => {
       const item1 = fortniteApiReq.data.data;
       const item2 = fortniteApiIoReq.data.items[0];
 
-      // Gestion de l'historique du shop
-      const shopHistory = item2.shopHistory || [];
-      const firstAppearance = shopHistory.length ? `<t:${Math.floor(new Date(shopHistory[0]).getTime() / 1000)}>` : "N/A";
-      const lastAppearance = shopHistory.length
-        ? `<t:${Math.floor(new Date(shopHistory[shopHistory.length - 1]).getTime() / 1000)}>`
+      // Gestion du shop (lastAppearance et releaseDate)
+      const releaseDate = item2.releaseDate ? `<t:${Math.floor(new Date(item2.releaseDate).getTime() / 1000)}>` : "N/A";
+      const lastAppearance = item2.lastAppearance
+        ? `<t:${Math.floor(new Date(item2.lastAppearance).getTime() / 1000)}>`
         : "N/A";
-      const totalAppearances = shopHistory.length;
 
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setThumbnail(item1.images.icon) // Image sur le côté
-        .setTitle("Cosmetic Info:")
+        .setTitle(`Information on: ${item1.name}`)
         .addFields(
-          { name: "Name:", value: item1.name, inline: true },
-          { name: "Description:", value: item1.description || "No description", inline: true },
-          { name: "Cosmetic ID:", value: item1.id, inline: true },
-          { name: "Cosmetic Type:", value: item1.type.displayValue, inline: true },
-          { name: "Rarity:", value: item1.rarity.displayValue, inline: true },
-          { name: "Set:", value: item1.set?.text || "No set information", inline: true },
-          { name: "Introduction:", value: item1.introduction?.text || "Unknown", inline: true },
-          { name: "Tags:", value: item2.gameplayTags?.join(", ") || "No tags available", inline: true },
-          { name: "Path:", value: item2.path || "No path available", inline: true },
-          { name: "Video:", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
+          { name: "Name", value: item1.name, inline: true },
+          { name: "Description", value: item1.description || "No description", inline: true },
+          { name: "Cosmetic ID", value: item1.id, inline: true },
+          { name: "Cosmetic Type", value: item1.type.displayValue, inline: true },
+          { name: "Rarity", value: item1.rarity.displayValue, inline: true },
+          { name: "Set", value: item1.set?.text || "No set information", inline: true },
+          { name: "Introduction", value: item1.introduction?.text || "Unknown", inline: true },
+          { name: "Tags", value: item2.gameplayTags?.length ? "```json\n" + item2.gameplayTags.join(", ") + "\n```" : "No tags available", inline: false },
+          { name: "Path", value: `\`${item2.path}\``, inline: false },
+          { name: "Video", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
           {
             name: "Shop History",
-            value: `First: ${firstAppearance}\nLast: ${lastAppearance}\nTotal: ${totalAppearances}`,
+            value: `Release Date: ${releaseDate}\nLast Appearance: ${lastAppearance}`,
             inline: true
           }
         );
