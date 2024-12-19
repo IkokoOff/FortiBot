@@ -18,16 +18,16 @@ module.exports.run = async (client, interaction) => {
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setThumbnail(item.images.icon) // Image sur le côté
-        .setTitle(`Information on: ${item.name}`)
+        .setTitle("Cosmetic Info:")
         .addFields(
-          { name: "Name", value: item.name, inline: true },
-          { name: "Description", value: item.description || "No description", inline: true },
-          { name: "Cosmetic ID", value: item.id, inline: true },
-          { name: "Cosmetic Type", value: item.type.displayValue, inline: true },
-          { name: "Rarity", value: item.rarity.displayValue, inline: true },
-          { name: "Set", value: item.set?.text || "No set information", inline: true },
-          { name: "Introduction", value: item.introduction?.text || "Unknown", inline: true },
-          { name: "Video", value: item.showcaseVideo ? `[Watch Video](https://youtu.be/${item.showcaseVideo})` : "No video available", inline: true }
+          { name: "Name:", value: item.name, inline: true },
+          { name: "Description:", value: item.description || "No description", inline: true },
+          { name: "Cosmetic ID:", value: item.id, inline: true },
+          { name: "Cosmetic Type:", value: item.type.displayValue, inline: true },
+          { name: "Rarity:", value: item.rarity.displayValue, inline: true },
+          { name: "Set:", value: item.set?.text || "No set information", inline: true },
+          { name: "Introduction:", value: item.introduction?.text || "Unknown", inline: true },
+          { name: "Video:", value: item.showcaseVideo ? `[Watch Video](https://youtu.be/${item.showcaseVideo})` : "No video available", inline: true }
         );
 
       return interaction.reply({ embeds: [embed] });
