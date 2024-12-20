@@ -58,7 +58,7 @@ async function loadHandlers(client) {
 async function updateStatus() {
   const server_count = client.guilds.cache.size;
   client.user.setPresence({
-    activities: [{ name: `${server_count} servers｜/help`, type: 'WATCHING' }],
+    activities: [{ name: `${server_count} servers!｜/help`, type: 'WATCHING' }],
     status: 'online',
   });
   console.log(chalk.blue(`Updated status: ${server_count} servers.`));
@@ -94,7 +94,7 @@ client.on("interactionCreate", async (interaction) => {
     const cmd = client.handlers.get(interaction.commandName);
     if (!cmd) {
       await interaction.reply({
-        content: "Commande non trouvée !",
+        content: "Order not found!",
         ephemeral: true,
       });
       return;
@@ -102,7 +102,7 @@ client.on("interactionCreate", async (interaction) => {
 
     const userId = interaction.user.id; // ID de l'utilisateur qui a exécuté la commande
     const now = Date.now();  // Timestamp actuel
-    const cooldownAmount = 3000;  // Cooldown de 3 secondes (3000 ms)
+    const cooldownAmount = 5000;  // Cooldown de 5 secondes (5000 ms)
 
     if (cooldowns.has(userId)) {
       const expirationTime = cooldowns.get(userId) + cooldownAmount;
@@ -125,7 +125,7 @@ client.on("interactionCreate", async (interaction) => {
     } catch (error) {
       console.error(chalk.red(`Erreur dans la commande ${interaction.commandName}:`), error);
       await interaction.reply({
-        content: "Une erreur est survenue lors de l'exécution de la commande.",
+        content: "An error occurred while executing the command.",
         ephemeral: true,
       });
     }
