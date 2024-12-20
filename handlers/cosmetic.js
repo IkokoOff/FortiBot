@@ -29,20 +29,16 @@ module.exports.run = async (client, interaction) => {
       const item1 = fortniteApiReq.data.data;
       const item2 = fortniteApiIoReq.data.items[0];
 
-      // Gestion du shop (lastAppearance, releaseDate et durée totale)
+      // Gestion du shop (lastAppearance, releaseDate et prix)
       const releaseDate = item2.releaseDate
-        ? new Date(item2.releaseDate)
-        : null;
+        ? `<t:${Math.floor(new Date(item2.releaseDate).getTime() / 1000)}>`
+        : "N/A";
       const lastAppearance = item2.lastAppearance
-        ? new Date(item2.lastAppearance)
-        : null;
+        ? `<t:${Math.floor(new Date(item2.lastAppearance).getTime() / 1000)}>`
+        : "N/A";
 
-      // Calcul de la durée totale en jours entre releaseDate et lastAppearance
-      let totalDays = "N/A";
-      if (releaseDate && lastAppearance) {
-        const timeDiff = Math.abs(lastAppearance - releaseDate);
-        totalDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Conversion en jours
-      }
+      // Récupération du prix
+      const price = item2.price ? `${item2.price} V-Bucks` : "Price not available";
 
       const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
@@ -61,7 +57,7 @@ module.exports.run = async (client, interaction) => {
           { name: "Video:", value: item1.showcaseVideo ? `[Watch Video](https://youtu.be/${item1.showcaseVideo})` : "No video available", inline: true },
           {
             name: "Shop History",
-            value: `Release Date: ${releaseDate ? `<t:${Math.floor(releaseDate.getTime() / 1000)}>` : "N/A"}\nLast Appearance: ${lastAppearance ? `<t:${Math.floor(lastAppearance.getTime() / 1000)}>` : "N/A"}\nTotal Days: ${totalDays}`,
+            value: `First: ${releaseDate}\nLast: ${lastAppearance}\nPrice: ${price}`,
             inline: true
           }
         );
