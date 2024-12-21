@@ -15,7 +15,7 @@ module.exports.run = async (client, interaction) => {
     const playlistData = response.data.data;
 
     const embed = new Discord.MessageEmbed()
-      .setColor("RANDOM")
+      .setColor("GREEN")
       .setTitle(`Playlist Information for **${id.toUpperCase()}**`)
       .addField("ID:", playlistData.id || "N/A", true)
       .addField("Name:", playlistData.name || "N/A", true)
@@ -33,9 +33,12 @@ module.exports.run = async (client, interaction) => {
   } catch (error) {
     console.error(chalk.red("Error in Fortnite playlist command:", error.message));
 
-    interaction.reply({
-      content: "The playlist ID is invalid or could not be found.",
-      ephemeral: true,
-    });
+    const errorEmbed = new Discord.MessageEmbed()
+      .setColor("RED")
+      .setTitle("Error: Playlist Not Found")
+      .setDescription("The playlist ID is invalid or could not be found. Please verify the ID and try again.")
+      .setFooter("Ensure the playlist ID is correct or exists in the Fortnite API.");
+
+    interaction.reply({ embeds: [errorEmbed] });
   }
 };
