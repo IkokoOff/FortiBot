@@ -56,7 +56,7 @@ module.exports.run = async (client, interaction) => {
           .setDisabled(page === totalPages - 1),
         new MessageButton()
           .setCustomId('close')
-          .setLabel('✕ Close')
+          .setLabel('<:denystatic:1320033866328838155> Close')
           .setStyle('DANGER')
       );
 
@@ -113,7 +113,7 @@ module.exports.run = async (client, interaction) => {
                     .setDisabled(true),
                   new MessageButton()
                     .setCustomId('close')
-                    .setLabel('✕ Close')
+                    .setLabel('<:denystatic:1320033866328838155> Close')
                     .setStyle('DANGER')
                     .setDisabled(true)
                 )
