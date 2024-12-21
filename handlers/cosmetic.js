@@ -41,7 +41,7 @@ module.exports.run = async (client, interaction) => {
       const price = item2.price ? `${item2.price} V-Bucks` : "Price not available";
 
       const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("GREEN")
         .setThumbnail(item1.images.icon) // Image sur le côté
         .setTitle("Cosmetic Info:")
         .addFields(
