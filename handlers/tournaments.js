@@ -108,7 +108,8 @@ module.exports.run = async (client, interaction) => {
                   .setDisabled(currentPage === chunkedEvents.length - 1),
                 new MessageButton()
                   .setCustomId('close')
-                  .setLabel('<:denystatic:1320033866328838155> Close')
+                  .setLabel('Close')
+                  .setEmoji('<:denystatic:1320033866328838155>')
                   .setStyle('DANGER')
               );
 
