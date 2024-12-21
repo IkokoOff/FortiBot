@@ -16,7 +16,7 @@ module.exports.run = async (client, interaction) => {
     const account = creatorData.account || {};
 
     const embed = new Discord.MessageEmbed()
-      .setColor("RANDOM")
+      .setColor("GREEN")
       .setTitle(`Data of a creator ${code.toUpperCase()} :`)
       .addField("Code:", creatorData.code || "N/A")
       .addField("Account ID:", account.id || "N/A")
