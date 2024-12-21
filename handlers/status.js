@@ -37,7 +37,7 @@ module.exports.run = async (client, interaction) => {
 
     // Créer l'embed avec les données de l'API et inclure l'image
     const embed = new Discord.MessageEmbed()
-      .setColor("RANDOM")
+      .setColor("GREEN")
       .setImage(`attachment://${path.basename(imagePath)}`) // URL de l'image locale
       .addField("**Fortnite Status:**", statusText || "N/A", false)
       .addField("**Message:**", fortniteStatus.message || "N/A", false)
