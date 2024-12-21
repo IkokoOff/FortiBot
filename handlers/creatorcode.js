@@ -21,13 +21,20 @@ module.exports.run = async (client, interaction) => {
       .addField("Code:", creatorData.code || "N/A")
       .addField("Account ID:", account.id || "N/A")
       .addField("Name:", account.name || "N/A")
-      .addField("status:", creatorData.status || "N/A")
+      .addField("Status:", creatorData.status || "N/A");
 
     interaction.reply({ embeds: [embed] });
   } catch (error) {
     console.error(chalk.red("Error in Fortnite creatorcode command:", error.message));
-    interaction.reply({
-      content: "Invalid creator code",
-    });
+
+    // Embed for error response
+    const errorEmbed = new Discord.MessageEmbed()
+      .setColor("RED")
+      .setTitle("Error")
+      .setDescription("There was an issue with fetching the creator code data.")
+      .addField("Error Message:", error.message)
+      .setFooter("Please check the code and try again.");
+
+    interaction.reply({ embeds: [errorEmbed] });
   }
 };
