@@ -50,8 +50,16 @@ module.exports.run = async (client, interaction) => {
     interaction.reply({ embeds: [embed], files: [attachment] });
   } catch (error) {
     console.error(chalk.red("Erreur lors de la commande de statut Fortnite:", error.message));
-    interaction.reply({
-      content: "Une erreur s'est produite lors de la récupération des données de l'API.",
-    });
+
+    const errorEmbed = new Discord.MessageEmbed()
+      .setColor("RED")
+      .setTitle("Error Fetching Fortnite Status")
+      .setDescription("Unable to retrieve data from the API. Please try again later.")
+      .setFooter({
+        text: client.user.username, // Nom du bot
+        iconURL: client.user.displayAvatarURL(), // Icône du bot
+      });
+
+    interaction.reply({ embeds: [errorEmbed] });
   }
 };
