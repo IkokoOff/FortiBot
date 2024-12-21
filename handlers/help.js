@@ -60,7 +60,7 @@ module.exports.run = async (client, interaction) => {
           .setStyle('DANGER')
       );
 
-    // Envoi initial de l'embed
+    // Send the initial embed
     const message = await interaction.reply({
       embeds: [generateEmbed(currentPage)],
       components: [generateButtons(currentPage)],
@@ -69,69 +69,58 @@ module.exports.run = async (client, interaction) => {
 
     const collector = message.createMessageComponentCollector({
       componentType: 'BUTTON',
-      time: 120000
+      time: 120000 // 2 minutes timeout
     });
 
-    collector.on('collect', async (i) => {
-      if (i.user.id !== interaction.user.id) {
-        return i.reply({ content: "You cannot use these buttons.", ephemeral: true });
+    collector.on('collect', async (btnInteraction) => {
+      // Ensure only the user who initiated the interaction can interact
+      if (btnInteraction.user.id !== interaction.user.id) {
+        return btnInteraction.reply({ content: "You cannot use these buttons.", ephemeral: true });
       }
 
-      if (i.customId === 'previous' && currentPage > 0) {
-        currentPage--;
-      } else if (i.customId === 'next' && currentPage < totalPages - 1) {
-        currentPage++;
-      } else if (i.customId === 'close') {
-        await i.message.delete().catch(console.error);
+      if (btnInteraction.customId === 'previous') {
+        currentPage = Math.max(currentPage - 1, 0);
+      } else if (btnInteraction.customId === 'next') {
+        currentPage = Math.min(currentPage + 1, totalPages - 1);
+      } else if (btnInteraction.customId === 'close') {
+        // Stop the collector and modify the message
         collector.stop();
-        return;
+        return btnInteraction.update({
+          content: "Interaction closed by the user.",
+          embeds: [],
+          components: []
+        });
       }
 
-      await i.update({
+      // Update the buttons and embed
+      const row = generateButtons(currentPage);
+      await btnInteraction.update({
         embeds: [generateEmbed(currentPage)],
-        components: [generateButtons(currentPage)]
+        components: [row]
       });
     });
 
     collector.on('end', async () => {
-      try {
-        const fetchedMessage = await interaction.channel.messages.fetch(message.id);
-        if (fetchedMessage) {
-          await fetchedMessage.edit({
-            components: [
-              new MessageActionRow()
-                .addComponents(
-                  new MessageButton()
-                    .setCustomId('previous')
-                    .setLabel('⬅️ Previous')
-                    .setStyle('PRIMARY')
-                    .setDisabled(true),
-                  new MessageButton()
-                    .setCustomId('next')
-                    .setLabel('➡️ Next')
-                    .setStyle('PRIMARY')
-                    .setDisabled(true),
-                  new MessageButton()
-                    .setCustomId('close')
-                    .setLabel('<:denystatic:1320033866328838155> Close')
-                    .setStyle('DANGER')
-                    .setDisabled(true)
-                )
-            ]
-          });
-          setTimeout(() => {
-            fetchedMessage.delete().catch(console.error);
-          }, 2000);
-        }
-      } catch (error) {
-        console.error("Error fetching or deleting the message:", error.message);
-      }
+      // Disable buttons after timeout
+      const row = generateButtons(currentPage);
+      row.components.forEach((button) => button.setDisabled(true));
+
+      await message.edit({ components: [row] }).catch(console.error);
     });
 
   } catch (error) {
     console.error("Error in help command:", error.message);
+
+    // Send error embed
+    const errorEmbed = new MessageEmbed()
+      .setColor('RED')
+      .setTitle('<a:denyanimated:1318915250627678269> An Error Occurred')
+      .setDescription('There was an error while processing your request. Please try again later.')
+      .addField('Error Message:', error.message)
+      .setFooter('If the issue persists, please contact support.');
+
     interaction.reply({
-      content: "An error occurred! Please try again later.",
+      embeds: [errorEmbed],
       ephemeral: true
     });
   }
