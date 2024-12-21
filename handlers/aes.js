@@ -17,7 +17,7 @@ module.exports.run = async (client, interaction) => {
     for (let i = 0; i < dynamicKeys.length; i += chunkSize) {
       const chunk = dynamicKeys.slice(i, i + chunkSize);
       const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("GREEN")
         .setTitle(`Current AES Keys for ${build} (Page ${Math.floor(i / chunkSize) + 1})`)
         .setDescription(`The main AES Key for this build is: **${mainKey}**`);
 
