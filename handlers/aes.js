@@ -46,7 +46,8 @@ module.exports.run = async (client, interaction) => {
         .setDisabled(pages.length === 1), // Disable "Next" if there's only one page
       new Discord.MessageButton()
         .setCustomId("close")
-        .setLabel("<:denystatic:1320033866328838155> Close")
+        .setLabel("Close")
+        .setEmoji('<:denystatic:1320033866328838155>')
         .setStyle("DANGER")
     );
 
