@@ -29,7 +29,7 @@ module.exports.run = async (client, interaction) => {
           const generateEmbed = (page) => {
             const eventsOnPage = chunkedEvents[page];
             const embed = new MessageEmbed()
-              .setColor("RANDOM")
+              .setColor("GREEN")
               .setTitle(`Upcoming Events for ${region}`)
               .setDescription(`Page ${page + 1} of ${chunkedEvents.length}`)
               .setFooter({ text: `Use the buttons to navigate or close.` });
