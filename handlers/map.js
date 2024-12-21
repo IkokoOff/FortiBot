@@ -17,7 +17,7 @@ module.exports.run = async (client, interaction) => {
     }
 
     const embed = new Discord.MessageEmbed()
-      .setColor("RANDOM")
+      .setColor("GREEN")
       .setTitle("Fortnite Map")
       .setImage(`${data.images.pois}?timestamp=${Date.now()}`) // Ajout du timestamp
       .setFooter(client.user.username, client.user.displayAvatarURL());
@@ -25,9 +25,15 @@ module.exports.run = async (client, interaction) => {
     await interaction.reply({ embeds: [embed] });
   } catch (error) {
     console.error(chalk.red("Error in Fortnite Map command:", error.message));
+
+    const errorEmbed = new Discord.MessageEmbed()
+      .setColor("RED")
+      .setTitle("Error")
+      .setDescription(`An error occurred while fetching the Fortnite map: ${error.message}`)
+      .setFooter("Please try again later");
+
     interaction.reply({
-      content: "An error occurred! Please try again later :)",
-      ephemeral: true, // Message visible uniquement à l'utilisateur
+      embeds: [errorEmbed],
     });
   }
 };
