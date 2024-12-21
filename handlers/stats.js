@@ -19,7 +19,11 @@ module.exports.run = async (client, interaction) => {
     });
     
     if (!req || !req.data || !req.data.result) {
-      return interaction.editReply({ content: "An error occurred. Please try again later." });
+      let errorEmbed = new Discord.MessageEmbed()
+        .setTitle("Error")
+        .setDescription("An error occurred while fetching your data. Please try again later.")
+        .setColor("RED");
+      return interaction.editReply({ embeds: [errorEmbed] });
     }
 
     let cache = req.data;
@@ -36,14 +40,22 @@ module.exports.run = async (client, interaction) => {
     });
     
     if (!statsReq || !statsReq.data || !statsReq.data.global_stats) {
-      return interaction.editReply({ content: "Your profile is private. Please set it to public in the settings." });
+      let errorEmbed = new Discord.MessageEmbed()
+        .setTitle("Error")
+        .setDescription("Your profile is private. Please set it to public in the settings.")
+        .setColor("RED");
+      return interaction.editReply({ embeds: [errorEmbed] });
     }
 
     let global = statsReq.data.global_stats;
 
     // Check if squad, duo, and solo stats are available
     if (!global.squad || !global.duo || !global.solo) {
-      return interaction.editReply({ content: "Stats not available for some modes." });
+      let errorEmbed = new Discord.MessageEmbed()
+        .setTitle("Error")
+        .setDescription("Stats not available for some modes.")
+        .setColor("RED");
+      return interaction.editReply({ embeds: [errorEmbed] });
     }
 
     // Calculate average K.D. and victories
@@ -64,6 +76,12 @@ module.exports.run = async (client, interaction) => {
 
   } catch (error) {
     console.error('Error fetching Fortnite stats:', error);
-    interaction.editReply({ content: "An error occurred. Please try again later." });
+    
+    let errorEmbed = new Discord.MessageEmbed()
+      .setTitle("Error")
+      .setDescription("An error occurred. Please try again later.")
+      .setColor("RED");
+    
+    interaction.editReply({ embeds: [errorEmbed] });
   }
 }
