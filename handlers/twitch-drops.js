@@ -48,7 +48,7 @@ module.exports.run = async (client, interaction) => {
             embeds: [
               new Discord.MessageEmbed()
                 .setTitle("No Active Drops")
-                .setColor("YELLOW")
+                .setColor("RED")
                 .setDescription("There are currently no active Twitch Drops for Fortnite."),
             ],
           });
@@ -59,7 +59,7 @@ module.exports.run = async (client, interaction) => {
           embeds: [
             new Discord.MessageEmbed()
               .setTitle("No Drops Available")
-              .setColor("YELLOW")
+              .setColor("RED")
               .setDescription("There are currently no registered Twitch Drops."),
           ],
         });
