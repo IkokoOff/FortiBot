@@ -66,7 +66,7 @@ module.exports.run = async (client, interaction) => {
     // Create embed with player stats
     let embed = new Discord.MessageEmbed()
       .setTitle(`Stats for ${statsReq.data.name}`)
-      .setColor("RANDOM")
+      .setColor("GREEN")
       .addField("Battlepass Level", statsReq.data.account.level.toString(), true)
       .addField("Victories", victories, true)
       .addField("Average K.D", averageKD.toString(), true)
